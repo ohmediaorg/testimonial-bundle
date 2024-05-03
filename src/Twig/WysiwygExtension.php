@@ -28,12 +28,29 @@ class WysiwygExtension extends AbstractWysiwygExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true,
             ]),
+            new TwigFunction('testimonials', [$this, 'testimonials'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true,
+            ]),
         ];
     }
 
     public function testimonial(Environment $twig, int $id = null)
     {
-        $testimonial = $this->testimonialRepository->find($id);
+        if (null === $id) {
+            // try to get one at random
+            $testimonials = $this->testimonialRepository->findAll();
+
+            if ($testimonials) {
+                shuffle($testimonials);
+
+                $testimonial = $testimonials[0];
+            } else {
+                $testimonial = null;
+            }
+        } else {
+            $testimonial = $this->testimonialRepository->find($id);
+        }
 
         if (!$testimonial) {
             return '';
@@ -43,9 +60,24 @@ class WysiwygExtension extends AbstractWysiwygExtension
             'testimonial' => $testimonial,
         ]);
 
-        if (!isset($this->schemas[$id])) {
-            $this->schemas[$id] = true;
+        $rendered .= $this->getSchema($testimonial);
 
+        return $rendered;
+    }
+
+    public function testimonials(Environment $twig)
+    {
+        $testimonials = $this->testimonialRepository
+            ->createQueryBuilder('t')
+            ->orderBy('t.ordinal', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $rendered = $twig->render('@OHMediaTestimonial/testimonials.html.twig', [
+            'testimonials' => $testimonials,
+        ]);
+
+        foreach ($testimonials as $testimonial) {
             $rendered .= $this->getSchema($testimonial);
         }
 
@@ -54,6 +86,14 @@ class WysiwygExtension extends AbstractWysiwygExtension
 
     private function getSchema(Testimonial $testimonial)
     {
+        $id = $testimonial->getId();
+
+        if (isset($this->schemas[$id])) {
+            return '';
+        }
+
+        $this->schemas[$id] = true;
+
         $image = $testimonial->getImage();
 
         if ($image && $image->getPath()) {
@@ -68,12 +108,12 @@ class WysiwygExtension extends AbstractWysiwygExtension
 
         $schema = [
             '@context' => 'https://schema.org',
-            '@type' => 'TestimonialObject',
-            'name' => $testimonial->getTitle(),
-            'thumbnailUrl' => $thumbnailUrl,
-            'duration' => $testimonial->getDurationISO8601(),
-            'contentUrl' => $testimonial->getUrl(),
-            'embedUrl' => $testimonial->getEmbedUrl(),
+            '@type' => 'Review',
+            'author' => [
+                '@type' => 'Person',
+                'name' => $testimonial->getAuthor(),
+            ],
+            'reviewBody' => $testimonial->getQuote(),
         ];
 
         return '<script type="application/ld+json">'.json_encode($schema).'</script>';
