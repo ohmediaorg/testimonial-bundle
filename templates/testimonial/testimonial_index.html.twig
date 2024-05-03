@@ -38,6 +38,7 @@
             <th style="width:1rem">&nbsp;</th>
             <th>Author</th>
             <th>Quote</th>
+            <th>Shortcode</th>
             <th>Last Updated</th>
             <th></th>
           </tr>
@@ -58,6 +59,7 @@
             <td class="text-truncate" style="max-width: 200px;">
               {{ testimonial.quote }}
             </td>
+            <td><code>{{ '{{ testimonial(' ~ testimonial.id ~ ') }}' }}</code></td>
             <td>{{ testimonial.updatedAt|datetime }}</td>
             <td>
               {% if is_granted(attributes.edit, testimonial) %}
