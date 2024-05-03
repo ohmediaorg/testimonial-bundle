@@ -1,0 +1,27 @@
+{
+    "name": "ohmediaorg/testimonial-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony TestimonialBundle",
+    "keywords": ["Testimonial"],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Justin Hoffman",
+            "email": "justin@ohmedia.ca"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "symfony/framework-bundle": "6.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "OHMedia\\TestimonialBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OHMedia\\TestimonialBundle\\Tests\\": "tests/"
+        }
+    }
+}
