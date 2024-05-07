@@ -73,6 +73,10 @@ class WysiwygExtension extends AbstractWysiwygExtension
             ->getQuery()
             ->getResult();
 
+        if (!$testimonials) {
+            return '';
+        }
+
         $rendered = $twig->render('@OHMediaTestimonial/testimonials.html.twig', [
             'testimonials' => $testimonials,
         ]);
