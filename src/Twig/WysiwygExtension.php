@@ -3,6 +3,7 @@
 namespace OHMedia\TestimonialBundle\Twig;
 
 use OHMedia\FileBundle\Service\FileManager;
+use OHMedia\SettingsBundle\Service\Settings;
 use OHMedia\TestimonialBundle\Entity\Testimonial;
 use OHMedia\TestimonialBundle\Repository\TestimonialRepository;
 use OHMedia\WysiwygBundle\Twig\AbstractWysiwygExtension;
@@ -17,6 +18,7 @@ class WysiwygExtension extends AbstractWysiwygExtension
     public function __construct(
         private FileManager $fileManager,
         private UrlHelper $urlHelper,
+        private Settings $settings,
         private TestimonialRepository $testimonialRepository
     ) {
     }
@@ -119,6 +121,15 @@ class WysiwygExtension extends AbstractWysiwygExtension
             ],
             'reviewBody' => $testimonial->getQuote(),
         ];
+
+        $organizationName = $this->settings->get('schema_organization_name');
+
+        if ($organizationName) {
+            $schema['itemReviewed'] = [
+                '@type' => 'Organization',
+                'name' => $organizationName,
+            ];
+        }
 
         return '<script type="application/ld+json">'.json_encode($schema).'</script>';
     }
