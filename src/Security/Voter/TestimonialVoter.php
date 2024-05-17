@@ -5,6 +5,7 @@ namespace OHMedia\TestimonialBundle\Security\Voter;
 use OHMedia\SecurityBundle\Entity\User;
 use OHMedia\SecurityBundle\Security\Voter\AbstractEntityVoter;
 use OHMedia\TestimonialBundle\Entity\Testimonial;
+use OHMedia\WysiwygBundle\Service\Wysiwyg;
 
 class TestimonialVoter extends AbstractEntityVoter
 {
@@ -12,6 +13,10 @@ class TestimonialVoter extends AbstractEntityVoter
     public const CREATE = 'create';
     public const EDIT = 'edit';
     public const DELETE = 'delete';
+
+    public function __construct(private Wysiwyg $wysiwyg)
+    {
+    }
 
     protected function getAttributes(): array
     {
@@ -45,6 +50,8 @@ class TestimonialVoter extends AbstractEntityVoter
 
     protected function canDelete(Testimonial $testimonial, User $loggedIn): bool
     {
-        return true;
+        $shortcode = sprintf('{{ testimonial(%d) }}', $testimonial->getId());
+
+        return !$this->wysiwyg->shortcodesInUse($shortcode);
     }
 }
