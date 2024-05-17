@@ -100,18 +100,6 @@ class WysiwygExtension extends AbstractWysiwygExtension
 
         $this->schemas[$id] = true;
 
-        $image = $testimonial->getImage();
-
-        if ($image && $image->getPath()) {
-            $path = $this->fileManager->getWebPath($testimonial->getImage());
-
-            $thumbnailUrl = [$this->urlHelper->getAbsoluteUrl($path)];
-        } elseif ($testimonial->getThumbnail()) {
-            $thumbnailUrl = [$testimonial->getThumbnail()];
-        } else {
-            $thumbnailUrl = [];
-        }
-
         $schema = [
             '@context' => 'https://schema.org',
             '@type' => 'Review',
