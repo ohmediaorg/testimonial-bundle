@@ -15,7 +15,7 @@
 {% block actions %}
 {% if can_create_testimonial %}
 <a href="{{ create_testimonial_href }}" class="btn btn-sm btn-primary">
-  <i class="bi bi-plus"></i> Add Testimonial</a>
+  {{ bootstrap_icon('plus') }} Add Testimonial</a>
 {% endif %}
 {% endblock %}
 
