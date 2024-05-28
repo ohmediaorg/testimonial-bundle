@@ -21,8 +21,12 @@ class TestimonialController extends AbstractController
 {
     private const CSRF_TOKEN_REORDER = 'testimonial_reorder';
 
+    public function __construct(private TestimonialRepository $testimonialRepository)
+    {
+    }
+
     #[Route('/testimonials', name: 'testimonial_index', methods: ['GET'])]
-    public function index(TestimonialRepository $testimonialRepository): Response
+    public function index(): Response
     {
         $newTestimonial = new Testimonial();
 
@@ -32,7 +36,7 @@ class TestimonialController extends AbstractController
             'You cannot access the list of testimonials.'
         );
 
-        $testimonials = $testimonialRepository->createQueryBuilder('t')
+        $testimonials = $this->testimonialRepository->createQueryBuilder('t')
             ->orderBy('t.ordinal', 'asc')
             ->getQuery()
             ->getResult();
@@ -48,7 +52,6 @@ class TestimonialController extends AbstractController
     #[Route('/testimonials/reorder', name: 'testimonial_reorder_post', methods: ['POST'])]
     public function reorderPost(
         Connection $connection,
-        TestimonialRepository $testimonialRepository,
         Request $request
     ): Response {
         $this->denyAccessUnlessGranted(
@@ -69,12 +72,12 @@ class TestimonialController extends AbstractController
 
         try {
             foreach ($testimonials as $ordinal => $id) {
-                $testimonial = $testimonialRepository->find($id);
+                $testimonial = $this->testimonialRepository->find($id);
 
                 if ($testimonial) {
                     $testimonial->setOrdinal($ordinal);
 
-                    $testimonialRepository->save($testimonial, true);
+                    $this->testimonialRepository->save($testimonial, true);
                 }
             }
 
@@ -89,10 +92,8 @@ class TestimonialController extends AbstractController
     }
 
     #[Route('/testimonial/create', name: 'testimonial_create', methods: ['GET', 'POST'])]
-    public function create(
-        Request $request,
-        TestimonialRepository $testimonialRepository
-    ): Response {
+    public function create(Request $request): Response
+    {
         $testimonial = new Testimonial();
 
         $this->denyAccessUnlessGranted(
@@ -108,7 +109,7 @@ class TestimonialController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $testimonialRepository->save($testimonial, true);
+            $this->testimonialRepository->save($testimonial, true);
 
             $this->addFlash('notice', 'The testimonial was created successfully.');
 
@@ -125,7 +126,6 @@ class TestimonialController extends AbstractController
     public function edit(
         Request $request,
         Testimonial $testimonial,
-        TestimonialRepository $testimonialRepository
     ): Response {
         $this->denyAccessUnlessGranted(
             TestimonialVoter::EDIT,
@@ -140,7 +140,7 @@ class TestimonialController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $testimonialRepository->save($testimonial, true);
+            $this->testimonialRepository->save($testimonial, true);
 
             $this->addFlash('notice', 'The testimonial was updated successfully.');
 
@@ -157,7 +157,6 @@ class TestimonialController extends AbstractController
     public function delete(
         Request $request,
         Testimonial $testimonial,
-        TestimonialRepository $testimonialRepository
     ): Response {
         $this->denyAccessUnlessGranted(
             TestimonialVoter::DELETE,
@@ -172,7 +171,7 @@ class TestimonialController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $testimonialRepository->remove($testimonial, true);
+            $this->testimonialRepository->remove($testimonial, true);
 
             $this->addFlash('notice', 'The testimonial was deleted successfully.');
 
