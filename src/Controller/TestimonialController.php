@@ -108,12 +108,16 @@ class TestimonialController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->testimonialRepository->save($testimonial, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->testimonialRepository->save($testimonial, true);
 
-            $this->addFlash('notice', 'The testimonial was created successfully.');
+                $this->addFlash('notice', 'The testimonial was created successfully.');
 
-            return $this->redirectToRoute('testimonial_index');
+                return $this->redirectToRoute('testimonial_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTestimonial/testimonial/testimonial_create.html.twig', [
@@ -139,12 +143,16 @@ class TestimonialController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->testimonialRepository->save($testimonial, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->testimonialRepository->save($testimonial, true);
 
-            $this->addFlash('notice', 'The testimonial was updated successfully.');
+                $this->addFlash('notice', 'The testimonial was updated successfully.');
 
-            return $this->redirectToRoute('testimonial_index');
+                return $this->redirectToRoute('testimonial_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTestimonial/testimonial/testimonial_edit.html.twig', [
@@ -170,12 +178,16 @@ class TestimonialController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->testimonialRepository->remove($testimonial, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->testimonialRepository->remove($testimonial, true);
 
-            $this->addFlash('notice', 'The testimonial was deleted successfully.');
+                $this->addFlash('notice', 'The testimonial was deleted successfully.');
 
-            return $this->redirectToRoute('testimonial_index');
+                return $this->redirectToRoute('testimonial_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTestimonial/testimonial/testimonial_delete.html.twig', [
