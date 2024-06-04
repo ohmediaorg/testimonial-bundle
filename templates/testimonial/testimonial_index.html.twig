@@ -59,7 +59,7 @@
             <td class="text-truncate" style="max-width: 200px;">
               {{ testimonial.quote }}
             </td>
-            <td><code>{{ '{{ testimonial(' ~ testimonial.id ~ ') }}' }}</code></td>
+            <td><code>{{ '{{testimonial(' ~ testimonial.id ~ ')}}' }}</code></td>
             <td>{{ testimonial.updatedAt|datetime }}</td>
             <td>
               {% if is_granted(attributes.edit, testimonial) %}
@@ -80,7 +80,7 @@
         </tbody>
       </table>
 
-      <small class="d-block">You may also use the shortcode <code>{{ '{{ testimonial() }}' }}</code> to output one random testimonial, and <code>{{ '{{ testimonials() }}' }}</code> to output all testimonials.</small>
+      <small class="d-block">You may also use the shortcode <code>{{ '{{testimonial()}}' }}</code> to output one random testimonial, and <code>{{ '{{testimonials()}}' }}</code> to output all testimonials.</small>
     {% else %}
       <p>
         No testimonials found.
