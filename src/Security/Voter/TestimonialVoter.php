@@ -50,7 +50,7 @@ class TestimonialVoter extends AbstractEntityVoter
 
     protected function canDelete(Testimonial $testimonial, User $loggedIn): bool
     {
-        $shortcode = sprintf('{{ testimonial(%d) }}', $testimonial->getId());
+        $shortcode = sprintf('testimonial(%d)', $testimonial->getId());
 
         return !$this->wysiwyg->shortcodesInUse($shortcode);
     }
