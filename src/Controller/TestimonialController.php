@@ -4,11 +4,11 @@ namespace OHMedia\TestimonialBundle\Controller;
 
 use Doctrine\DBAL\Connection;
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
-use OHMedia\SecurityBundle\Form\DeleteType;
 use OHMedia\TestimonialBundle\Entity\Testimonial;
 use OHMedia\TestimonialBundle\Form\TestimonialType;
 use OHMedia\TestimonialBundle\Repository\TestimonialRepository;
 use OHMedia\TestimonialBundle\Security\Voter\TestimonialVoter;
+use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
