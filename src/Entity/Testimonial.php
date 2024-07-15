@@ -5,13 +5,13 @@ namespace OHMedia\TestimonialBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OHMedia\FileBundle\Entity\File;
-use OHMedia\SecurityBundle\Entity\Traits\BlameableTrait;
 use OHMedia\TestimonialBundle\Repository\TestimonialRepository;
+use OHMedia\UtilityBundle\Entity\BlameableEntityTrait;
 
 #[ORM\Entity(repositoryClass: TestimonialRepository::class)]
 class Testimonial
 {
-    use BlameableTrait;
+    use BlameableEntityTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
