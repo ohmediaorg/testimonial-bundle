@@ -2,9 +2,9 @@
 
 namespace OHMedia\TestimonialBundle\Service;
 
-use OHMedia\BackendBundle\Shortcodes\AbstractShortcodeProvider;
-use OHMedia\BackendBundle\Shortcodes\Shortcode;
 use OHMedia\TestimonialBundle\Repository\TestimonialRepository;
+use OHMedia\WysiwygBundle\Shortcodes\AbstractShortcodeProvider;
+use OHMedia\WysiwygBundle\Shortcodes\Shortcode;
 
 class TestimonialShortcodeProvider extends AbstractShortcodeProvider
 {
