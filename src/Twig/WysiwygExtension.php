@@ -37,7 +37,7 @@ class WysiwygExtension extends AbstractWysiwygExtension
         ];
     }
 
-    public function testimonial(Environment $twig, int $id = null)
+    public function testimonial(Environment $twig, ?int $id = null)
     {
         if (null === $id) {
             // try to get one at random
@@ -108,6 +108,12 @@ class WysiwygExtension extends AbstractWysiwygExtension
                 'name' => $testimonial->getAuthor(),
             ],
             'reviewBody' => $testimonial->getQuote(),
+            'reviewRating' => [
+                '@type' => 'Rating',
+                'bestRating' => Testimonial::RATING_MAX,
+                'ratingValue' => $testimonial->getRating() * 1.0,
+                'worstRating' => Testimonial::RATING_MIN,
+            ],
         ];
 
         $organizationName = $this->settings->get('schema_organization_name');

@@ -7,11 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 use OHMedia\FileBundle\Entity\File;
 use OHMedia\TestimonialBundle\Repository\TestimonialRepository;
 use OHMedia\UtilityBundle\Entity\BlameableEntityTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TestimonialRepository::class)]
 class Testimonial
 {
     use BlameableEntityTrait;
+
+    public const RATING_MIN = 0;
+    public const RATING_MAX = 5;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,9 +26,11 @@ class Testimonial
     private ?int $ordinal = 9999;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $author = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $quote = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -32,6 +38,11 @@ class Testimonial
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $affiliation = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 2, scale: 1, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Range(min: self::RATING_MIN, max: self::RATING_MAX)]
+    private ?string $rating = null;
 
     public function __toString(): string
     {
@@ -99,6 +110,18 @@ class Testimonial
     public function setAffiliation(?string $affiliation): static
     {
         $this->affiliation = $affiliation;
+
+        return $this;
+    }
+
+    public function getRating(): ?string
+    {
+        return $this->rating ?? (string) self::RATING_MAX;
+    }
+
+    public function setRating(?string $rating): static
+    {
+        $this->rating = $rating;
 
         return $this;
     }

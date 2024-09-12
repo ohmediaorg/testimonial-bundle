@@ -5,6 +5,7 @@ namespace OHMedia\TestimonialBundle\Form;
 use OHMedia\FileBundle\Form\Type\FileEntityType;
 use OHMedia\TestimonialBundle\Entity\Testimonial;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,10 +29,25 @@ class TestimonialType extends AbstractType
             ],
         ]);
 
+        $builder->add('rating', NumberType::class, [
+            'label' => sprintf(
+                'Rating (%s-%s)',
+                Testimonial::RATING_MIN,
+                Testimonial::RATING_MAX
+            ),
+            'attr' => [
+                'min' => Testimonial::RATING_MIN,
+                'max' => Testimonial::RATING_MAX,
+                'step' => 0.1,
+            ],
+            'html5' => true,
+            'scale' => 1,
+        ]);
+
         $builder->add('image', FileEntityType::class, [
-             'image' => true,
-             'data' => $testimonial->getImage(),
-             'required' => false,
+            'image' => true,
+            'data' => $testimonial->getImage(),
+            'required' => false,
         ]);
     }
 
