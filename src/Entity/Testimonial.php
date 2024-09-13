@@ -27,16 +27,19 @@ class Testimonial
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $author = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $quote = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?File $image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $affiliation = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 2, scale: 1, nullable: true)]
@@ -71,7 +74,7 @@ class Testimonial
         return $this->author;
     }
 
-    public function setAuthor(string $author): static
+    public function setAuthor(?string $author): static
     {
         $this->author = $author;
 
@@ -83,7 +86,7 @@ class Testimonial
         return $this->quote;
     }
 
-    public function setQuote(string $quote): static
+    public function setQuote(?string $quote): static
     {
         $this->quote = $quote;
 
