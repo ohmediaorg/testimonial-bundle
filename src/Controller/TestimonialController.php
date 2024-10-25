@@ -9,6 +9,7 @@ use OHMedia\TestimonialBundle\Form\TestimonialType;
 use OHMedia\TestimonialBundle\Repository\TestimonialRepository;
 use OHMedia\TestimonialBundle\Security\Voter\TestimonialVoter;
 use OHMedia\UtilityBundle\Form\DeleteType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -129,7 +130,7 @@ class TestimonialController extends AbstractController
     #[Route('/testimonial/{id}/edit', name: 'testimonial_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
-        Testimonial $testimonial,
+        #[MapEntity(id: 'id')] Testimonial $testimonial,
     ): Response {
         $this->denyAccessUnlessGranted(
             TestimonialVoter::EDIT,
@@ -164,7 +165,7 @@ class TestimonialController extends AbstractController
     #[Route('/testimonial/{id}/delete', name: 'testimonial_delete', methods: ['GET', 'POST'])]
     public function delete(
         Request $request,
-        Testimonial $testimonial,
+        #[MapEntity(id: 'id')] Testimonial $testimonial,
     ): Response {
         $this->denyAccessUnlessGranted(
             TestimonialVoter::DELETE,
