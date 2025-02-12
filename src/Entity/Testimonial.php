@@ -42,7 +42,7 @@ class Testimonial
     #[Assert\Length(max: 255)]
     private ?string $affiliation = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 2, scale: 1, nullable: true)]
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     #[Assert\NotBlank]
     #[Assert\Range(min: self::RATING_MIN, max: self::RATING_MAX)]
     private ?string $rating = null;
@@ -117,12 +117,12 @@ class Testimonial
         return $this;
     }
 
-    public function getRating(): ?string
+    public function getRating(): ?int
     {
-        return $this->rating ?? (string) self::RATING_MAX;
+        return $this->rating ?? self::RATING_MAX;
     }
 
-    public function setRating(?string $rating): static
+    public function setRating(?int $rating): static
     {
         $this->rating = $rating;
 
