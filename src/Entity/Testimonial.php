@@ -45,7 +45,7 @@ class Testimonial
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     #[Assert\NotBlank]
     #[Assert\Range(min: self::RATING_MIN, max: self::RATING_MAX)]
-    private ?string $rating = null;
+    private ?int $rating = null;
 
     public function __toString(): string
     {
