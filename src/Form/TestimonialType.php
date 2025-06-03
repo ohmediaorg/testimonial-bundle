@@ -15,8 +15,6 @@ class TestimonialType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $testimonial = $options['data'];
-
         $builder->add('author');
 
         $builder->add('affiliation', TextType::class, [
@@ -44,7 +42,6 @@ class TestimonialType extends AbstractType
 
         $builder->add('image', FileEntityType::class, [
             'image' => true,
-            'data' => $testimonial->getImage(),
             'required' => false,
         ]);
     }
