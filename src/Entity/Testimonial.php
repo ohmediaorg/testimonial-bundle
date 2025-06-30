@@ -36,6 +36,7 @@ class Testimonial
     private ?string $quote = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Assert\Valid]
     private ?File $image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
