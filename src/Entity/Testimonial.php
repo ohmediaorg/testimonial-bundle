@@ -25,9 +25,9 @@ class Testimonial
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $ordinal = 9999;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: 50)]
     private ?string $author = null;
 
     #[ORM\Column(length: 255)]
@@ -39,8 +39,8 @@ class Testimonial
     #[Assert\Valid]
     private ?File $image = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100)]
     private ?string $affiliation = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
