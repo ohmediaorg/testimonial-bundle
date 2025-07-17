@@ -105,7 +105,7 @@ class TestimonialController extends AbstractController
 
         $form = $this->createForm(TestimonialType::class, $testimonial);
 
-        $form->add('submit', SubmitType::class);
+        $form->add('save', SubmitType::class);
 
         $form->handleRequest($request);
 
@@ -140,7 +140,7 @@ class TestimonialController extends AbstractController
 
         $form = $this->createForm(TestimonialType::class, $testimonial);
 
-        $form->add('submit', SubmitType::class);
+        $form->add('save', SubmitType::class);
 
         $form->handleRequest($request);
 
