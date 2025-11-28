@@ -14,7 +14,7 @@ class TestimonialNavItemProvider extends AbstractNavItemProvider
     {
         if ($this->isGranted(TestimonialVoter::INDEX, new Testimonial())) {
             return (new NavLink('Testimonials', 'testimonial_index'))
-                ->setIcon('megaphone-fill');
+                ->setIcon('quote');
         }
 
         return null;
