@@ -3,6 +3,7 @@
 namespace OHMedia\TestimonialBundle\Controller;
 
 use Doctrine\DBAL\Connection;
+use OHMedia\BackendBundle\Form\MultiSaveType;
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
 use OHMedia\TestimonialBundle\Entity\Testimonial;
 use OHMedia\TestimonialBundle\Form\TestimonialType;
@@ -12,6 +13,7 @@ use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,7 +107,7 @@ class TestimonialController extends AbstractController
 
         $form = $this->createForm(TestimonialType::class, $testimonial);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($request);
 
@@ -115,7 +117,7 @@ class TestimonialController extends AbstractController
 
                 $this->addFlash('notice', 'The testimonial was created successfully.');
 
-                return $this->redirectToRoute('testimonial_index');
+                return $this->redirectForm($testimonial, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -140,7 +142,7 @@ class TestimonialController extends AbstractController
 
         $form = $this->createForm(TestimonialType::class, $testimonial);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($request);
 
@@ -150,7 +152,7 @@ class TestimonialController extends AbstractController
 
                 $this->addFlash('notice', 'The testimonial was updated successfully.');
 
-                return $this->redirectToRoute('testimonial_index');
+                return $this->redirectForm($testimonial, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -160,6 +162,21 @@ class TestimonialController extends AbstractController
             'form' => $form->createView(),
             'testimonial' => $testimonial,
         ]);
+    }
+
+    private function redirectForm(Testimonial $testimonial, FormInterface $form): Response
+    {
+        $clickedButtonName = $form->getClickedButton()->getName() ?? null;
+
+        if ('keep_editing' === $clickedButtonName) {
+            return $this->redirectToRoute('testimonial_edit', [
+                'id' => $testimonial->getId(),
+            ]);
+        } elseif ('add_another' === $clickedButtonName) {
+            return $this->redirectToRoute('testimonial_create');
+        } else {
+            return $this->redirectToRoute('testimonial_index');
+        }
     }
 
     #[Route('/testimonial/{id}/delete', name: 'testimonial_delete', methods: ['GET', 'POST'])]
