@@ -3,9 +3,9 @@
 {% block meta_title %}Testimonials{% endblock %}
 
 {% block breadcrumbs %}
-{{ bootstrap_breadcrumbs(
-  bootstrap_breadcrumb(bootstrap_icon('quote') ~ ' Testimonials', 'testimonial_index'),
-) }}
+  {{ bootstrap_breadcrumbs(
+    bootstrap_breadcrumb(bootstrap_icon('quote') ~ ' Testimonials', 'testimonial_index'),
+  ) }}
 {% endblock %}
 
 {% set can_create_testimonial = is_granted(attributes.create, new_testimonial) %}
@@ -13,82 +13,84 @@
 {% set create_testimonial_href = path('testimonial_create') %}
 
 {% block actions %}
-{% if can_create_testimonial %}
-<a href="{{ create_testimonial_href }}" class="btn btn-sm btn-primary">
-  {{ bootstrap_icon('plus-lg') }} Add Testimonial</a>
-{% endif %}
+  {% if can_create_testimonial %}
+    <a href="{{ create_testimonial_href }}" class="btn btn-primary">
+      {{ bootstrap_icon('plus-lg') }}
+      Add Testimonial
+    </a>
+  {% endif %}
 {% endblock %}
 
 {% block main %}
-{% set testimonial_count = testimonials|length %}
+  {% set testimonial_count = testimonials|length %}
 
-<div class="card">
-  <div class="card-body">
-    <div class="card-title card-title-with-count">
-      <h1 class="card-title-heading">Testimonials</h1>
-      <div class="card-title-count">
-        {{ bootstrap_badge_primary(testimonial_count) }}
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title card-title-with-count">
+        <h1 class="card-title-heading">Testimonials</h1>
+        <div class="card-title-count">
+          {{ bootstrap_badge_primary(testimonial_count) }}
+        </div>
       </div>
+
+      {% if testimonial_count %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width:1rem">&nbsp;</th>
+              <th>Author</th>
+              <th>Quote</th>
+              <th>Shortcode</th>
+              <th>Last Updated</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody
+            data-sortable
+            data-sortable-csrf-name="{{ csrf_token_name }}"
+            data-sortable-csrf-token="{{ csrf_token(csrf_token_name) }}"
+            data-sortable-url="{{ path('testimonial_reorder_post') }}"
+          >
+            {% for testimonial in testimonials %}
+              <tr data-id="{{ testimonial.id }}">
+                <td data-handle>{{ bootstrap_icon('arrows-move') }}</td>
+                <td>
+                  {{ testimonial.author }}
+                  <small class="d-block text-muted">{{ testimonial.affiliation }}</small>
+                </td>
+                <td class="text-truncate" style="max-width: 200px;">
+                  {{ testimonial.quote }}
+                </td>
+                <td>{{ shortcode('testimonial(' ~ testimonial.id ~ ')') }}</td>
+                <td>{{ testimonial.updatedAt|datetime }}</td>
+                <td>
+                  {% if is_granted(attributes.edit, testimonial) %}
+                    <a class="btn btn-sm btn-primary btn-action" href="{{ path('testimonial_edit', {id: testimonial.id}) }}" title="Edit">
+                      {{ bootstrap_icon('pencil') }}
+                      <span class="visually-hidden">Edit</span>
+                    </a>
+                  {% endif %}
+                  {% if is_granted(attributes.delete, testimonial) %}
+                    <a class="btn btn-sm btn-danger btn-action" href="{{ path('testimonial_delete', {id: testimonial.id}) }}" title="Delete" data-confirm="Are you sure you want to delete this testimonial? Clicking OK will take you to a verification step to delete this entry.">
+                      {{ bootstrap_icon('trash') }}
+                      <span class="visually-hidden">Delete</span>
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <small class="d-block">You may also use the shortcode <code>{{ '{{testimonial()}}' }}</code> to output one random testimonial, and <code>{{ '{{testimonials()}}' }}</code> to output all testimonials.</small>
+      {% else %}
+        <p>
+          No testimonials found.
+          {% if can_create_testimonial %}
+            <a href="{{ create_testimonial_href }}">Click here to add a testimonial.</a>
+          {% endif %}
+        </p>
+      {% endif %}
     </div>
-
-    {% if testimonial_count %}
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width:1rem">&nbsp;</th>
-            <th>Author</th>
-            <th>Quote</th>
-            <th>Shortcode</th>
-            <th>Last Updated</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody
-          data-sortable
-          data-sortable-csrf-name="{{ csrf_token_name }}"
-          data-sortable-csrf-token="{{ csrf_token(csrf_token_name) }}"
-          data-sortable-url="{{ path('testimonial_reorder_post') }}"
-        >
-        {% for testimonial in testimonials %}
-          <tr data-id="{{ testimonial.id }}">
-            <td data-handle>{{ bootstrap_icon('arrows-move') }}</td>
-            <td>
-              {{ testimonial.author }}
-              <small class="d-block text-muted">{{ testimonial.affiliation }}</small>
-            </td>
-            <td class="text-truncate" style="max-width: 200px;">
-              {{ testimonial.quote }}
-            </td>
-            <td>{{ shortcode('testimonial(' ~ testimonial.id ~ ')') }}</td>
-            <td>{{ testimonial.updatedAt|datetime }}</td>
-            <td>
-              {% if is_granted(attributes.edit, testimonial) %}
-              <a class="btn btn-sm btn-primary btn-action" href="{{ path('testimonial_edit', {id: testimonial.id}) }}" title="Edit">
-                {{ bootstrap_icon('pencil') }}
-                <span class="visually-hidden">Edit</span>
-              </a>
-              {% endif %}
-              {% if is_granted(attributes.delete, testimonial) %}
-              <a class="btn btn-sm btn-danger btn-action" href="{{ path('testimonial_delete', {id: testimonial.id}) }}" title="Delete" data-confirm="Are you sure you want to delete this testimonial? Clicking OK will take you to a verification step to delete this entry.">
-                {{ bootstrap_icon('trash') }}
-                <span class="visually-hidden">Delete</span>
-              </a>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <small class="d-block">You may also use the shortcode <code>{{ '{{testimonial()}}' }}</code> to output one random testimonial, and <code>{{ '{{testimonials()}}' }}</code> to output all testimonials.</small>
-    {% else %}
-      <p>
-        No testimonials found.
-        {% if can_create_testimonial %}
-        <a href="{{ create_testimonial_href }}">Click here to add a testimonial.</a>
-        {% endif %}
-      </p>
-    {% endif %}
   </div>
-</div>
 {% endblock %}
